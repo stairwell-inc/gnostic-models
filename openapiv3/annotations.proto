@@ -65,7 +65,6 @@ message PathParamHint {
   repeated string example = 3;
 }
 
-// Hints for synthetic path parameters at the method level.
 message PathParamHints {
   repeated PathParamHint hint = 1;
 }
