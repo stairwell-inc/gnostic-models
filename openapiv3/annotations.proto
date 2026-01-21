@@ -43,8 +43,35 @@ extend google.protobuf.FileOptions {
   Document document = 1143;
 }
 
+// Manually specify a description or examples for a generated OpenAPI v3 path
+// parameter.
+// This option is useful for HTTP rules which follow a resource name pattern
+// variable binding, such as:
+//   '/v1/{name=publishers/*/books/*}'
+// where protoc-gen-openapi generates path parameter names by
+// replacing the wildcards with the singular form of the segment before it
+// (e.g. '/v1/publishers/{publisher}/books{book}').
+// By default, these path parameters receive a generic description such as
+// 'The publisher id', which can be overridden with this option.
+message PathParamHint {
+  // The generated singular parameter name (e.g. 'book')
+  string name = 1;
+  // The value for the OpenAPI 'description' field (e.g.: 'The ISBN number')
+  string description = 2;
+  // One or more examples.
+  // If len(example) == 1, the value is put in the 'example' field.
+  // If len(example) > 1, examples are put in the 'examples' array, and
+  // are given the names 'example1' .. 'exampleN'.
+  repeated string example = 3;
+}
+
+message PathParamHints {
+  repeated PathParamHint hint = 1;
+}
+
 extend google.protobuf.MethodOptions {
   Operation operation = 1143;
+  PathParamHints path_param_hints = 1144;
 }
 
 extend google.protobuf.MessageOptions {
