@@ -50,7 +50,7 @@ extend google.protobuf.FileOptions {
 //   '/v1/{name=publishers/*/books/*}'
 // where protoc-gen-openapi generates path parameter names by
 // replacing the wildcards with the singular form of the segment before it
-// (e.g. '/v1/publishers/{publisher}/books{book}').
+// (e.g. '/v1/publishers/{publisher}/books/{book}').
 // By default, these path parameters receive a generic description such as
 // 'The publisher id', which can be overridden with this option.
 message PathParamHint {
@@ -58,15 +58,25 @@ message PathParamHint {
   string name = 1;
   // The value for the OpenAPI 'description' field (e.g.: 'The ISBN number')
   string description = 2;
-  // One or more examples.
-  // If len(example) == 1, the value is put in the 'example' field.
-  // If len(example) > 1, examples are put in the 'examples' array, and
-  // are given the names 'example1' .. 'exampleN'.
-  repeated string example = 3;
+  // Optional example value. If provided, overrides "examples"
+  string example = 3;
+  // Multiple examples. If provided, "example" must be empty.
+  repeated PathParamExample examples = 4;
 }
 
 message PathParamHints {
   repeated PathParamHint hint = 1;
+}
+
+// A named example for a path parameter, used when multiple examples are needed.
+// Maps to an entry in the OpenAPI 'examples' object.
+message PathParamExample {
+  // The name of the example case (required).
+  string name = 1;
+  // The value of this example (required).
+  string value = 2;
+  // Optional extended description for this specific example.
+  string description = 3;
 }
 
 extend google.protobuf.MethodOptions {
